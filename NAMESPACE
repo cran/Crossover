@@ -1,0 +1,28 @@
+useDynLib(Crossover)
+
+importFrom(stats4, plot)
+import(methods)
+import(JavaGD)
+import(rJava)
+importFrom(CommonJavaJars, loadJars)
+importFrom(digest, digest)
+importFrom(multcomp, contrMat)
+importFrom(MASS, ginv)
+importFrom(Matrix, bdiag)
+importFrom(Matrix, triu)
+importFrom(ggplot2, ggplot)
+importFrom(crossdes, allcombs, des.MOLS, balmin.RMD, find.BIB, williams, williams.BIB)
+importFrom(xtable, xtable)
+
+export(CrossoverGUI)
+export(design.efficiency)
+export(general.carryover)
+
+export(searchCrossOverDesign)
+export(general.carryover)
+
+export(buildSummaryTable)
+
+exportMethods(plot, print, show, getDesign)
+
+# export(getDesignMatrix) TODO: Do we want to export this function?
