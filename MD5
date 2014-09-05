@@ -1,4 +1,4 @@
-7e80dae9b2956d1b1b3827bb2879c1ad *DESCRIPTION
+79edec54a4a56ce48189895a122e7fe9 *DESCRIPTION
 50136e53875a0c1057f27956e430500c *NAMESPACE
 c342d3e05dc0e04dd4182d628e66ba90 *NEWS
 94192f2eccef68574887125fe022dcbc *R/buildSummary.R
@@ -127,7 +127,7 @@ ba104f00522ac250e8ba56649c44ac96 *man/searchCrossOverDesign.Rd
 d166a7dc70c663432798d4ab27f85685 *src/Makevars
 3041ef492cc500178cdb6ab77f2cffd3 *src/Makevars.win
 babd4b7a66561382f8b2a5c5a7a574fd *src/searchCOD.cpp
-bd62d0508b396e32df6045c29e695bc7 *src/searchCOD.h
+b2a7b472a96b8283552d3ffad237fe48 *src/searchCOD.h
 8d8b3ce9a06d9f3e938fab223b549e44 *tests/doRUnit.R
 9f98a6df580bb121eb9010bb36b61ffd *vignettes/Crossover.Rnw
 ec0375fe58b49eb6e9a295132ed30c86 *vignettes/figures/Algorithm.png

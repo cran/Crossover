@@ -6,6 +6,9 @@
 #include <R.h>
 #include <Rmath.h>
 
+// needed on x86 Solaris
+#undef CS
+
 /*
  * note : RcppExport is an alias to `extern "C"` defined by Rcpp.
  *
