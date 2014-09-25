@@ -67,7 +67,8 @@ public class MenuBarCrossover extends JMenuBar implements ActionListener {
 		JMenu menu = new JMenu("Analysis");
 		menu.setMnemonic(KeyEvent.VK_A);
 
-		menu.add(makeMenuItem("Extended analysis", "analysis"));
+		menu.add(makeMenuItem("Extended analysis", "analysis", false));
+		menu.add(makeMenuItem("Sample size calculations", "analysis", false));
 		//if (Configuration.getInstance().getGeneralConfig().experimentalFeatures()) {
 		//menu.addSeparator();
 		//menu.add(makeMenuItem("Power analysis (still experimental)", "powerAnalysis"));		
@@ -190,7 +191,7 @@ public class MenuBarCrossover extends JMenuBar implements ActionListener {
         	new RObjectLoadingDialog(control, "Select design");
         	createLastUsed();        	
         } else if (e.getActionCommand().equals("saveArchive")) {    	
-        	control.dac.save();
+        	control.dac.save(control);
         } else if (e.getActionCommand().equals("showLog")) {    	
         	showLog();
         } else if (e.getActionCommand().equals("reportError")) {       	

@@ -83,6 +83,14 @@ public class GeneralConfig extends SpecificConfig {
 	
 	public void setCheckOnline(boolean checkOnline) {
 		setProperty("checkOnline", ""+checkOnline);
+	}	
+	
+	public boolean haveReadGPL() {
+		return Boolean.parseBoolean(getProperty("haveReadGPL", "false"));
+	}
+	
+	public void setHaveReadGPL(boolean checkOnline) {
+		setProperty("haveReadGPL", ""+checkOnline);
 	}
 	
 	public boolean tellAboutCheckOnline() {
@@ -235,4 +243,36 @@ public class GeneralConfig extends SpecificConfig {
 		return Boolean.parseBoolean(getProperty("askWhenGraphIsNotSaved", "false"));
 	}
 
+	public void setAskForSaveDir(boolean b) {
+		setProperty("askForSaveDir", ""+b);		
+	}
+	
+	public boolean askForSaveDir() {
+		return Boolean.parseBoolean(getProperty("askForSaveDir", "true"));
+	}
+
+	public void setSaveDir(String saveDir) {
+        setProperty("savedir", saveDir);
+    }
+
+    public String getSaveDir() {    	
+        String saveDir = getProperty("savedir", "NOT_SET");
+        if (!new File(saveDir).exists()) return "NOT_SET";
+        return saveDir;
+    }
+    
+    /**
+     * For example use
+     * <pre> 
+     * Sys.setenv(FAILSAFE="true")
+ 	 * </pre>
+ 	 * to activate failsafe mode.
+     * @return
+     */
+    public Boolean failSafeMode() {
+    	String failsafe = System.getenv("FAILSAFE");
+    	if (failsafe==null) return false;
+    	return Boolean.parseBoolean(failsafe);
+    }
+	
 }

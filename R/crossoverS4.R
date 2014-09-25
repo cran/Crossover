@@ -7,17 +7,16 @@
 #' @aliases CrossoverDesign-class CrossoverDesign show,CrossoverDesign-method
 #' print,CrossoverDesign-method
 #' @docType class
-#' @section Slots: \describe{ \item{list("design")}{ Matrix }\item{:}{ Matrix }
-#' \item{list("s")}{ Number of sequences. }\item{:}{ Number of sequences. }
-#' \item{list("p")}{ Number of periods. }\item{:}{ Number of periods. }
-#' \item{list("v")}{ Number of treatments. }\item{:}{ Number of treatments. }
+#' @section Slots: \describe{ \item{list("design")}{ Matrix specifying the design. Rows represent periods and columns the subjects.}
+#' \item{list("s")}{ Number of sequences. }
+#' \item{list("p")}{ Number of periods. }
+#' \item{list("v")}{ Number of treatments. }
 #' \item{list("model")}{ A numeric specifying the model the design was searched
-#' for or -1 if unknown. }\item{:}{ A numeric specifying the model the design
-#' was searched for or -1 if unknown. } \item{list("description")}{ Optional
-#' description of design or reference. }\item{:}{ Optional description of
-#' design or reference. } \item{list("attr")}{ List with attributes. }\item{:}{
-#' List with attributes. } \item{list("misc")}{ List with miscellaneous stuff -
-#' not used yet. }\item{:}{ List with miscellaneous stuff - not used yet. } }
+#' for or -1 if unknown. }
+#' \item{list("description")}{ Optional
+#' description of design or reference. }
+#' \item{list("attr")}{ List with attributes. }
+#' \item{list("misc")}{ List with miscellaneous stuff - not used yet. } }
 #' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
 #' @keywords graphs
 #' @examples
@@ -98,23 +97,22 @@ setMethod("show", "CrossoverDesign",
 #' @docType class
 #' @section Slots: \describe{ \item{list("design")}{An object of class
 #' \code{CrossoverDesign} describing the best design that was
-#' found.}\item{:}{An object of class \code{CrossoverDesign} describing the
-#' best design that was found.} \item{list("startDesigns")}{A list of start
-#' designs to search from.}\item{:}{A list of start designs to search from.}
+#' found.}
+#' \item{list("startDesigns")}{A list of start
+#' designs to search from.}
 #' \item{list("model")}{A numeric specifying the model the design was searched
-#' for or -1 if unknown.}\item{:}{A numeric specifying the model the design was
-#' searched for or -1 if unknown.} \item{list("eff")}{List, Progress of the
-#' algorithm. TODO: Explain further.}\item{:}{List, Progress of the algorithm.
-#' TODO: Explain further.} \item{list("search")}{List, TODO}\item{:}{List,
-#' TODO} \item{list("time")}{Named numeric with the time in seconds the
-#' algorithm was searching.}\item{:}{Named numeric with the time in seconds the
-#' algorithm was searching.} \item{list("misc")}{List - in the moment not
-#' used.}\item{:}{List - in the moment not used.} }
+#' for or -1 if unknown.}
+#' \item{list("eff")}{List, Progress of the
+#' algorithm. TODO: Explain further.}
+#' \item{list("search")}{List, TODO}
+#' \item{list("time")}{Named numeric with the time in seconds the
+#' algorithm was searching.}
+#' \item{list("misc")}{List - in the moment not used.}}
 #' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
 #' @examples
 #' 
-#' 
-#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4)
+#' # n=c(100,10) is very small, but it's just an example and should not take much time
+#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4, n=c(100,10))
 #' print(x)
 #' 
 setClass("CrossoverSearchResult",		
@@ -163,11 +161,12 @@ setMethod("show", "CrossoverSearchResult",
 #' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
 #' @examples
 #' 
-#' 
+#' \dontrun{
 #' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4)
 #' plot(x)
+#' }
 #' 
-#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4, n=c(500,10), jumps=c(10, 100))
+#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4, n=c(50,10), jumps=c(10, 10))
 #' plot(x, show.jumps=TRUE)
 #' plot(x, type=2)
 #' 
@@ -175,7 +174,7 @@ setMethod("show", "CrossoverSearchResult",
 #' @docType methods
 #' @rdname plot-methods
 setMethod("plot", c(x="CrossoverSearchResult", y="missing") ,
-          function(x, y, type=1, show.jumps=FALSE, ...) { #function(x, ) {
+          function(x, y, type=1, show.jumps=FALSE) { #function(x, ) {
             eff <- unlist(x@eff)
             run <- as.factor(rep(1:length(x@eff), each=length(x@eff[[1]])))
             n <- 1:(length(x@eff[[1]])*length(x@eff))
@@ -212,8 +211,9 @@ setGeneric("getDesign", function(object, ...) standardGeneric("getDesign"))
 #' @return Returns a numeric matrix representing the crossover design.
 #' @author Kornelius Rohmeyer \email{rohmeyer@@small-projects.de}
 #' @examples
-#' #' 
-#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4)
+#' 
+#' # n=c(100,10) is very small, but it's just an example and should not take much time
+#' x <- searchCrossOverDesign(s=9, p=5, v=4, model=4, n=c(100,10))
 #' getDesign(x)
 #' 
 #' @export
