@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -56,17 +57,17 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 	List<JTextField> effV = new Vector<JTextField>();
 	List<JTextField> nV = new Vector<JTextField>();
 	CellConstraints cc = new CellConstraints();
-	JRadioButton jbBalanceNothing = new JRadioButton("No balancing restrictions");
-	JRadioButton jbBalanceSequences = new JRadioButton("Balance treatments in regard to sequences (may decrease efficiency)");
-	JRadioButton jbBalancePeriods = new JRadioButton("Balance treatments in regard to periods (may decrease efficiency)");
+	JRadioButton jbBalanceNothing = new JRadioButton("No balancing restrictions");	
+	JRadioButton jbBalanceSequences = new JRadioButton("Balance treatments in regard to sequences");	 
+	JRadioButton jbBalancePeriods = new JRadioButton("Balance treatments in regard to periods");
 	CrossoverGUI gui;	
 	JButton exportR = new JButton("Export to R");
 	JButton showAlgoPerformance = new JButton("Search algorithm plot");
 	JCheckBox useCatalogueDesigns = new JCheckBox("Use designs from catalogue as starting point");
-	JComboBox jcbContrasts = new JComboBox(new String[] {"All pair comparisons (Tukey)", "Comparing treatment 1 to each of the others (Dunnett)", "User defined"} );
+	JComboBox jcbContrasts = new JComboBox(new String[] {"All pair comparisons (Tukey)", "Comparing treatment 1 to each of the others (Dunnett)"}); //, "User defined"} );
 	String[] contrasts = new String[] {"Tukey", "Dunnett", "User defined"};
 	//JComboBox jCBMixed = new JComboBox(new String[] {"Fixed subject effects model", "Random subject effects model"});
-	JComboBox jcbCorrelation = new JComboBox(new String[] {"Independence", "Autoregressive Error", "Equicorrelated Error", "User defined"});
+	JComboBox jcbCorrelation = new JComboBox(new String[] {"Independence", "Autoregressive Error", "Equicorrelated Error"}); //, "User defined"});
 	String[] correlations = new String[] {"NULL", "autoregressive", "equicorrelated", "user defined"};
 	JCheckBox fixedNumber = new JCheckBox("Specify exact number of treatment assignments:");
 	JCheckBox fixedSubjectEffects = new JCheckBox("Include fixed subject effects in design matrix.");
@@ -75,7 +76,7 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 	JLabel jlVar;
 	JTextField jtWithinSubjectRho;
 	//JTabbedPane jTabAlgo = new jTabAlgo;
-	String udcm;
+	//String udcm;
 	JSplitPane pane;
 	
 	ClassConfig ac = new ClassConfig(Configuration.getInstance(), AlgorithmPanel.class);
@@ -187,7 +188,7 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 	public JPanel getLeftSidePanel() {
 		lsPanel = new JPanel();
 		String cols = "5dlu, pref, 5dlu, fill:min:grow, 5dlu";
-        String rows = "5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu";
+        String rows = "5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu";
         
         lsPanel.setLayout(new FormLayout(cols, rows));
 		
@@ -249,7 +250,9 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
         ButtonGroup group = new ButtonGroup();
         group.add(jbBalanceNothing);
         group.add(jbBalanceSequences);
+        jbBalanceSequences.setToolTipText("May decrease efficiency");
         group.add(jbBalancePeriods);
+        jbBalancePeriods.setToolTipText("May decrease efficiency");
         jbBalanceNothing.setSelected(true);
               
         lsPanel.add(jbBalanceNothing, cc.xyw(2, row, 3));
@@ -260,7 +263,10 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
         row+=2;
         
         lsPanel.add(new JLabel("Contrasts:"), cc.xy(2, row));
-        lsPanel.add(jcbContrasts, cc.xy(4, row));
+        
+        row+=2;
+        
+        lsPanel.add(jcbContrasts, cc.xyw(2, row, 3));
 
         row+=2;    
         
@@ -359,8 +365,9 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 		cbcWeights.fill = GridBagConstraints.BOTH;	
 		cbcWeights.gridx=0; cbcWeights.gridy=0;
 		cbcWeights.gridwidth = 1; cbcWeights.gridheight = 1;
-		cbcWeights.ipadx=5; cbcWeights.ipady=5;
+		//cbcWeights.ipadx=5; cbcWeights.ipady=5;
 		cbcWeights.weightx=1; cbcWeights.weighty=1;
+		cbcWeights.insets = new Insets(2, 2, 2, 2);
 		if (firstCall) fixedNumber.addActionListener(this);
 		ntPanel.setBorder(new ComponentTitledBorder(fixedNumber, ntPanel, BorderFactory.createTitledBorder("Weights:")));
 		//ntPanel.setBorder(BorderFactory.createTitledBorder("Number of treatment assignments"));
@@ -374,12 +381,12 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 		int p = Integer.parseInt(gui.spinnerP.getModel().getValue().toString());
 		
 		for (int i=1; i<=v; i++) {        	
-        	labels.add("Treatment "+i+":");        	        	
+        	labels.add(" Treatment "+i+":");        	        	
         }      
         
 		nV.clear();
 		for (int i=0;i<labels.size();i++) {        		
-			nV.add(new JTextField(""+((s*p)/v+((i<(s*p)%v)?1:0)), 6));
+			nV.add(new JTextField(""+((s*p)/v+((i<(s*p)%v)?1:0)), 3));
 			ntPanel.add(new JLabel(labels.get(i)), cbcWeights);
 			cbcWeights.gridx++;
 			ntPanel.add(nV.get(i), cbcWeights);	
@@ -438,8 +445,8 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 					+", balance.s="+(jbBalanceSequences.isSelected()?"TRUE":"FALSE")
 					+", balance.p="+(jbBalancePeriods.isSelected()?"TRUE":"FALSE")
 					+getCorrelation()
-					+(gui.jCBmodel.getSelectedIndex()==4?", model.param=list(placebos="+gui.jtfParam.getText()+")":"")
-					+(gui.jCBmodel.getSelectedIndex()==7?", model.param=list(ppp="+gui.jtfParam.getText()+")":"")
+					+(gui.jCBmodel.getSelectedIndex()==gui.PLACEBOMODEL?", model.param=list(placebos="+gui.jtfParam.getText()+")":"")
+					+(gui.jCBmodel.getSelectedIndex()==gui.PROPORTIONALMODEL?", model.param=list(ppp="+gui.jtfParam.getText()+")":"")
 					+(useCatalogueDesigns.isSelected()?", start.designs=\"catalog\"":"")	
 					+", random.subject="+(fixedSubjectEffects.isSelected()?"FALSE":"TRUE")
 					+", n=c("+jtN1.getText()+","+jtN2.getText()+")"
@@ -534,7 +541,7 @@ public class AlgorithmPanel extends JPanel implements ActionListener, ChangeList
 
 	private String getCorrelation() {
 		if (jcbCorrelation.getSelectedIndex()==0) return "";
-		if (jcbCorrelation.getSelectedIndex()==3) return ", correlation="+udcm;		
+		//if (jcbCorrelation.getSelectedIndex()==3) return ", correlation="+udcm;		
 		return ", correlation=\""+correlations[jcbCorrelation.getSelectedIndex()]+"\", rho="+jtWithinSubjectRho.getText();
 	}
 

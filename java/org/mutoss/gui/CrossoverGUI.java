@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -51,7 +53,7 @@ import org.mutoss.gui.dialogs.TellAboutOnlineUpate;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class CrossoverGUI extends JFrame implements WindowListener, ActionListener, ChangeListener, ListSelectionListener, AbortListener {
+public class CrossoverGUI extends JFrame implements WindowListener, ActionListener, ChangeListener, ListSelectionListener, AbortListener, DocumentListener {
 	 static { // Static initializer block to set the Locale
 		 Locale.setDefault(Locale.ENGLISH);
 		 JComponent.setDefaultLocale(Locale.ENGLISH);			 
@@ -86,6 +88,9 @@ public class CrossoverGUI extends JFrame implements WindowListener, ActionListen
 		{"Treatment", "Carry-over (1st order)", "Carry-over (2nd order)"},
 		{}
 	};
+	
+	public static final int PLACEBOMODEL = 3;
+	public static final int PROPORTIONALMODEL = 2;
 	 
 	/**
 	 * Constructor - you will not need to change things here
@@ -324,6 +329,7 @@ public class CrossoverGUI extends JFrame implements WindowListener, ActionListen
 		modelPanel.add(jtfParam, cc.xy(4, row));
 		pLabel.setEnabled(false);
 		jtfParam.setEnabled(false);
+		jtfParam.getDocument().addDocumentListener(this);
 		return modelPanel;
 	}
 	
@@ -359,13 +365,17 @@ public class CrossoverGUI extends JFrame implements WindowListener, ActionListen
 		}
 	}
 	
+	public double getParam() {
+		return Double.parseDouble(jtfParam.getText());
+	}
+	 
 	private void newModelSelected() {
 		algorithmPanel.createEffPanel();
-		if (jCBmodel.getSelectedIndex()==4) {
+		if (jCBmodel.getSelectedIndex()==PLACEBOMODEL) {
 			jtfParam.setEnabled(true);
 			pLabel.setEnabled(true);
 			pLabel.setText("Number of placebo treatments:");
-		} else if (jCBmodel.getSelectedIndex()==7) {
+		} else if (jCBmodel.getSelectedIndex()==PROPORTIONALMODEL) {
 			jtfParam.setEnabled(true);
 			pLabel.setEnabled(true);
 			pLabel.setText("Proportionality parameter:");
@@ -374,7 +384,12 @@ public class CrossoverGUI extends JFrame implements WindowListener, ActionListen
 			pLabel.setEnabled(false);
 			pLabel.setText("Further model parameters:");
 		}
-		designPanel.valueChanged(null);		
+		designPanel.valueChanged(null);	
+		int i = designPanel.designTable.getSelectedRow();		
+		designPanel.designTable.getModel().fireTableDataChanged();
+		if (i != -1) {
+			designPanel.designTable.setRowSelectionInterval(i, i);
+		}
 	}
 
 	/**
@@ -528,6 +543,34 @@ public class CrossoverGUI extends JFrame implements WindowListener, ActionListen
 	
 	public void resetLock() {
 		lock = false;
+	}
+
+	public int getModel() {		
+		return jCBmodel.getSelectedIndex()+1;
+	}
+
+	public void insertUpdate(DocumentEvent e) {
+		try {
+			newModelSelected();
+		} catch(Exception ex) {
+			
+		}		
+	}
+
+	public void removeUpdate(DocumentEvent e) {
+		try {
+			newModelSelected();
+		} catch(Exception ex) {
+			
+		}		
+	}
+
+	public void changedUpdate(DocumentEvent e) {
+		try {
+			newModelSelected();
+		} catch(Exception ex) {
+			
+		}		
 	}
 
 }

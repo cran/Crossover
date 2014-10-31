@@ -47,16 +47,16 @@ getTable <- function(d, type="HTML", forceInteger=TRUE, digits=4, names=TRUE) {
   }
 }
 
-getDesignText <- function(d, model=1, type="HTML", carryover=TRUE, digits=4, var=TRUE, eff=TRUE, names=TRUE) {
-  result <- paste("<p><b>Model:</b> ", models[[getModelNr(model)]], "<br></p>")
+getDesignText <- function(d, model=1, type="HTML", carryover=TRUE, digits=4, var=TRUE, eff=TRUE, names=TRUE, model.param=list()) {  
+  result <- ""
   if (var) {
     m <- general.carryover(d, model=model)$Var.trt.pair
     result <- paste(result, "<b>Var.trt.pair:</b><br>", getTable(m, type, forceInteger=FALSE, digits=digits, names=names))  
   }
   if (eff) {
     warn <- ""
-    if (model!=1) warn <- "(Warning: efficiency is calculated for model 1)"
-    m <- design.efficiency(d)$eff.trt.pair.adj
+    #if (model!=1) warn <- "(Warning: efficiency is calculated for model 1)"
+    m <- design.efficiency(d, model=model, model.param=model.param)$eff.trt.pair.adj
     result <- paste(result, "<b>Eff.trt.pair",warn,":</b><br>", getTable(m, type, forceInteger=FALSE, digits=digits, names=names),sep="")  
   }
   if (carryover) {

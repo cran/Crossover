@@ -1,5 +1,7 @@
 package org.mutoss.gui;
 
+import java.util.Hashtable;
+
 import org.mutoss.config.Configuration;
 
 /**
@@ -18,11 +20,10 @@ public class Design {
 	public int s;
 	public int p;
 	String design;
-	Double efficiencyAdj = null;
-	Double efficiencyUnadj = null;
 	String result = null;
 	String rName = null;
 	String uniqueName = null;
+	Hashtable<String, Double> ht = new Hashtable<String, Double>();
 	
 	public Design(String title, String rName) {
 		this(title, rName, null);
@@ -43,9 +44,6 @@ public class Design {
 		p = dim[0];
 		s = dim[1];		
 		design = RControl.getR().eval("paste(capture.output(dput("+uniqueName+")), collapse=\"\")").asRChar().getData()[0];
-		double[] eff = RControl.getR().eval("Crossover:::getEff("+(rName==null?design:rName)+")").asRNumeric().getData();
-		efficiencyUnadj = eff[0];
-		efficiencyAdj = eff[1];
 	}
 	
 	/**
@@ -68,10 +66,6 @@ public class Design {
 		this.s = s;
 		this.p = p;
 		this.design = design;
-		double[] eff = RControl.getR().eval("Crossover:::getEff("+(rName==null?design:rName)+")").asRNumeric().getData();
-		efficiencyUnadj = eff[0];
-		efficiencyAdj = eff[1];		
-		saveDesign2R(true);
 	}
 	
 	/**
@@ -135,5 +129,27 @@ public class Design {
 				+", type=\""+Configuration.getInstance().getProperty("outputF", "HTML")+"\"" 
 				+", names="+(Boolean.parseBoolean(Configuration.getInstance().getProperty("showNames", ""+true))?"TRUE":"FALSE")+")").asRChar().getData()[0];
 		return result;
+	}
+
+	public boolean isEstimable(int model) {
+		return RControl.getR().eval("Crossover:::estimable("+uniqueName+", "+t+", "+model+")").asRLogical().getData()[0];		
+	}
+	
+	public double getEff(int model, double param) {
+		String key = ""+model;
+		if (model==CrossoverGUI.PLACEBOMODEL || model==CrossoverGUI.PROPORTIONALMODEL) {
+			key = ""+model+"-"+param;			
+		}
+		Double v = ht.get(key);
+		if (v==null) {
+			v = RControl.getR().eval("getOffDiagMean(design.efficiency("+getUniqueName()+", model="+model+", model.param=list(ppp="+param+", placebos="+param+"))$eff.trt.pair.adj)").asRNumeric().getData()[0];
+			ht.put(key, v);
+		}
+		return v;
+	}
+
+	public String getUniqueName() {
+		if (uniqueName==null) saveDesign2R(true);
+		return uniqueName;
 	}
 }

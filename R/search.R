@@ -10,8 +10,8 @@
 #' @param model Model - one of the following: "Standard additive model" (2),
 #' "Second-order carry-over effects" (3), "Full set of interactions" (3),
 #' "Self-adjacency model" (3), "Placebo model" (2), "No carry-over into self
-#' model" (2), "Treatment decay model" (2), "Proportionality model" (1). The
-#' number in parentheses is the number of different efficiency factors that can
+#' model" (2), "Treatment decay model" (2), "Proportionality model" (1), "No carry-over effects" (0).
+#' The number in parentheses is the number of different efficiency factors that can
 #' be specified.
 #' @param eff.factor Weights for different efficiency factors. (Not used in the
 #' moment.)
@@ -150,32 +150,6 @@ searchCrossOverDesign <- function(s, p, v, model="Standard additive model", eff.
              search=list(n=n, jumps=jumps), model=model, time=time, misc=list(designs=result$designs)))
 }
 
-randomDesign <- function(s, p, v,  v.rep, balance.s=FALSE, balance.p=FALSE, model, C) {
-  if (missing(v.rep)) {
-    v.rep <- rep((s*p) %/% v, v) + c(rep(1, (s*p) %% v), rep(0, v-((s*p) %% v)))
-  }
-  design <- randomDesignWithoutCheck(s, p, v,  v.rep, balance.s, balance.p, model)
-  i <- 0
-  # We should disable the really rare warnings estimable_R could throw.
-  while (!estimable_R(design, v, model, C)) {   
-    i <- i + 1
-    if (i>1000) stop("Could not find design that allows estimation of contrasts after 1000 tries.")
-    design <- randomDesignWithoutCheck(s, p, v,  v.rep, balance.s, balance.p, model)
-  } 
-  return(design)
-}
-
-randomDesignWithoutCheck <- function(s, p, v,  v.rep, balance.s=FALSE, balance.p=FALSE, model) {
-    if (balance.s) {
-        design <- matrix(unlist(tapply(rep(1:v, v.rep), as.factor(rep(1:s,p)), sample)), p, s)
-    } else if (balance.p) {
-        design <- matrix(unlist(tapply(rep(1:v, v.rep), as.factor(rep(1:p,s)), sample)), p, s, byrow=TRUE)
-    } else {
-        design <- matrix(sample(rep(1:v, v.rep)), p, s)
-    }
-    return(design)
-}
-
 getS1 <- function(design, v, model, C, randomS=FALSE, verbose=0) {
     if(missing(C)) {
         Csub <- contrMat(n=rep(1, v), type="Tukey")
@@ -205,17 +179,18 @@ getTrtPair <- function(design, model=1) {
   return(triu(gco$Var.trt.pair))
 }
 
-getValues <- function(design, model=1, C, v) {
+getValues <- function(design, model=1, C, v, ppp=0.5, placebos=1) {
+  model <- getModelNr(model)
   if (missing(C)) {
     Csub <- contrMat(n=rep(1, v), type="Tukey")
     class(Csub) <- "matrix" #TODO Package matrix can be improved here (IMO)!
-    C <- cbind(Csub,matrix(0,dim(Csub)[1],v)) 
+    C <- appendZeroColumns(Csub, model, v)
     CC <- t(C) %*% C
   }
   rcDesign <- rcd(design, v, model=model)
-  Ar <- infMatrix(rcDesign, v)
-  H <- linkMatrix(model, v)
-  return(diag(ginv(t(H) %*% Ar %*% H) %*% CC))  
+  Ar <- infMatrix(rcDesign, v, model=model)
+  H <- linkMatrix(model, v, ppp=ppp, placebos=placebos)
+  return(diag(C %*% ginv(t(H) %*% Ar %*% H) %*% t(C)))  
 }
 
 getDesignMatrix <- function(design, v) {

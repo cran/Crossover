@@ -45,23 +45,27 @@ public class HTMLOutputPane extends JPanel implements ActionListener {
     	textArea.appendParagraph(textArea.makeBold(design.title + " ("+design.getRSignature()+")"));
     	textArea.appendParagraph("");
     	textArea.appendHTML(design.getHTMLTable());
-    	textArea.appendParagraph("<b>Av.eff.trt.pair.adj:</b> "+gui.df.format(design.efficiencyAdj));
+    	textArea.appendParagraph("<b>Av.eff.trt.pair.adj:</b> "+gui.df.format(design.getEff(gui.getModel(), gui.getParam())));
     	if (design.reference!=null) textArea.appendParagraph(textArea.makeBold("Reference: ")+"<i>"+design.reference.replaceAll("\\n", "<br>")+"</i>");
     	textArea.appendParagraph(getGeneralCarryover(design));	
 	}
 
 	private String getGeneralCarryover(Design design) {
-		String designS = design.rName;
-		if (designS == null) {
-			designS = design.design;
-		}
-		String command = "Crossover:::getDesignText("+designS+", model="+(gui.jCBmodel.getSelectedIndex()+1)
-				+", type=\""+Configuration.getInstance().getProperty("outputF", "HTML")+"\""
-				+", carryover="+(Boolean.parseBoolean(Configuration.getInstance().getProperty("showCarryOver", ""+false))?"TRUE":"FALSE")
-				+", digits="+Configuration.getInstance().getGeneralConfig().getDigits()
-				+", names="+(Boolean.parseBoolean(Configuration.getInstance().getProperty("showNames", ""+true))?"TRUE":"FALSE")
-				+")";
-		return RControl.getR().eval(command).asRChar().getData()[0];
+		String result = "<p><b>Model:</b> "+(gui.jCBmodel.getSelectedItem())+ "<br></p>";
+		if (!design.isEstimable(gui.getModel())) {
+    		result += "<b style=\"color:red\"> Design does not allow to estimate all treatment differences under this model. </b>";
+    	} else {
+    		String command = "Crossover:::getDesignText("+design.uniqueName+", model="+gui.getModel()
+    				+", type=\""+Configuration.getInstance().getProperty("outputF", "HTML")+"\""
+    				+", carryover="+(Boolean.parseBoolean(Configuration.getInstance().getProperty("showCarryOver", ""+false))?"TRUE":"FALSE")
+    				+", digits="+Configuration.getInstance().getGeneralConfig().getDigits()
+    				+", names="+(Boolean.parseBoolean(Configuration.getInstance().getProperty("showNames", ""+true))?"TRUE":"FALSE")
+    				+(gui.jCBmodel.getSelectedIndex()==gui.PLACEBOMODEL?", model.param=list(placebos="+gui.jtfParam.getText()+")":"")
+    				+(gui.jCBmodel.getSelectedIndex()==gui.PROPORTIONALMODEL?", model.param=list(ppp="+gui.jtfParam.getText()+")":"")
+    				+")";
+    		result += RControl.getR().eval(command).asRChar().getData()[0];
+    	}
+		return result;
 	}
 
 	public void showError(Throwable e) throws BadLocationException, IOException {    	
