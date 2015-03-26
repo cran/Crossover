@@ -185,10 +185,12 @@ if (!exists("bibCall")) {
 }
 
 ## ----set-parent-search, echo=FALSE, cache=FALSE, include=FALSE----------------
+library(knitr)
 set_parent('../Crossover.Rnw')
 library(multcomp)
 library(Crossover)
 library(MASS)
+library(xtable)
 
 ## ----SearchStrategy, echo=TRUE, eval=TRUE, cache=TRUE, dev='png', dpi=150-----
 
@@ -255,6 +257,81 @@ tdiff1 <- t(C)%*%ginv(A1)[1:6,1:6]%*%C
 tdiff2 <- t(C)%*%ginv(A2)%*%C
 tdiff1 - tdiff2
 
+
+## ----include=FALSE------------------------------------------------------------
+data(exampleSearchResults2t)
+
+## ----echo=FALSE, results='asis'-----------------------------------------------
+
+options(xtable.include.rownames=FALSE, xtable.include.colnames=FALSE, xtable.floating=FALSE)
+
+df <- c()
+
+for (i in 1:length(resultL)) { 
+  design <- resultL[[i]]
+  cat("Design ",i,":\n")
+  print(xtable(design, digits=0)) 
+  var <- c()
+  var2 <- c()
+  for (m in models[1:8]) {
+    
+    #C <- Crossover:::contrMat2(type="Tukey", v=2, model=m, eff.factor=c(1,1,1))
+    #C <- contrMat(rep(1, Crossover:::nrOfParameters(model=i, v=v)), "Tukey")
+    
+    if (Crossover:::estimable_R(design, v=2, model=m)) {
+      var <- c(var, general.carryover(design, model=m)$Var.trt.pair[1,2]/4)      
+    } else {
+      var <- c(var, NA)      
+    }
+  }
+  df <- rbind(df, var)  
+}
+
+rownames(df) <- NULL
+df <- as.data.frame(df)
+colnames(df) <- c("Additive", "Self-adjacency", "Proportional", "Placebo", "No into self", "Decay", "Interaction", "2nd-order carry-over")
+df <- cbind(data.frame(Design=1:length(resultL)), df)
+
+options(xtable.include.colnames=TRUE, xtable.NA.string="Not estimable")
+
+cat("\\[\\]")
+
+cat("\\scriptsize")
+
+print(xtable(df, digits=3))
+
+# cat("\\[\\]")
+# print(xtable(df2, digits=3))
+# max(abs(df-df2))
+
+
+## ----echo=FALSE, include=FALSE, eval=FALSE------------------------------------
+#  
+#  TRIES <- 25
+#  resultSubL <- list()
+#  i <- 6
+#  model <- models[i]
+#  cat("======= ", model, " =======","\n")
+#  for (k in 1:TRIES) {
+#    result <- sortDesign(getDesign(searchCrossOverDesign(s=s, p=p, v=v, model=model, v.rep=c(12,12), eff.factor=c(1,0.01), contrast="Tukey"))) #, start.designs=list(designs[[i]]))
+#    already.found <- FALSE
+#    for (design in resultSubL) {
+#      if (all(result==design)) already.found <- TRUE
+#    }
+#    if (!already.found) {
+#      resultSubL <- c(resultSubL, list(result))
+#      print(getDesign(result))
+#      cat("\nTreatment: ", general.carryover(designs[[i]], model=i)$Var.trt.pair[1,2]/4, "(literature) vs. ", general.carryover(result, model=i)$Var.trt.pair[1,2]/4,"\n")
+#      gco <- general.carryover(designs[[i]], model=i)
+#      if (!is.null(dim(gco[[2]]))) {
+#        cat("(1st) Carryover: ", gco[[2]][1,2]/4, "(literature) vs. ", general.carryover(result, model=i)[[2]][1,2]/4,"\n\n")
+#      }
+#      cat(paste("designB",i,sep=""), "<-", Crossover:::dputMatrix(getDesign(result)))
+#    }
+#  }
+#  #resultL <- c(resultL, resultSubL)
+#  #save(resultL, file="resultL.RData")
+#  
 
 ## ----bibtex-search, results='asis', echo=FALSE--------------------------------
 if (!exists("bibCall")) {
