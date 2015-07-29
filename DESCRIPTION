@@ -1,7 +1,7 @@
 Package: Crossover
 Type: Package
 Title: Analysis and Search of Crossover Designs
-Version: 0.1-14
+Version: 0.1-15
 Author: Kornelius Rohmeyer
 Maintainer: Kornelius Rohmeyer <rohmeyer@small-projects.de>
 Description: Package Crossover provides different crossover designs from combinatorial or search algorithms as well as from literature and a GUI to access them.
@@ -17,6 +17,6 @@ VignetteBuilder: knitr
 URL: https://github.com/kornl/Crossover/wiki
 BugReports: https://github.com/kornl/Crossover/issues
 NeedsCompilation: yes
-Packaged: 2015-03-26 14:43:58 UTC; kornel
+Packaged: 2015-07-29 14:04:32 UTC; kornel
 Repository: CRAN
-Date/Publication: 2015-03-26 17:04:53
+Date/Publication: 2015-07-29 16:33:12
