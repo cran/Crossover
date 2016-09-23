@@ -595,3 +595,5 @@ test.ge <- function() {
     }
   }
 }
+
+test.ge()

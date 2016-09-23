@@ -31,6 +31,7 @@ import org.af.commons.logging.LoggingSystem;
 import org.af.commons.threading.SafeSwingWorker;
 import org.af.commons.tools.StringTools;
 import org.af.commons.widgets.GUIToolKit;
+import org.af.commons.widgets.RightClickTextMenuListener;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -111,14 +112,15 @@ public abstract class ErrorDialogChooseLevelBase extends JDialog implements Acti
 	    jcbReportLevel.setSelectedIndex(rLevel);
 		jcbReportLevel.addActionListener(this);
 	    
+		subjectShort = getSubjectShort();
+		
 		jta = new JTextArea(getErrorReport(jcbReportLevel.getSelectedIndex()));
 		jta.setCaretPosition(0);
 		jta.setFont(new Font("Monospaced", Font.PLAIN, 10));
 		jta.setLineWrap(true);
 		jta.setWrapStyleWord(true);
 		jta.setMargin(new Insets(4,4,4,4));
-		
-		subjectShort = getSubjectShort();
+		jta.addMouseListener(new RightClickTextMenuListener(jta));
 		
     	subjectLong = subjectShort+" : "+    			
     			(message.length()<40?message:message.substring(0, 37)+"...");
@@ -284,9 +286,13 @@ public abstract class ErrorDialogChooseLevelBase extends JDialog implements Acti
     	return table;
     }
 	
-    protected Hashtable<String, File> getAttachedFiles() throws IOException {
+	protected Hashtable<String, File> getAttachedFiles() throws IOException {
     	return new Hashtable<String, File>();
-    }
+    }    
+
+    protected String getRErrorMessage() {
+		return StringTools.collapseStringArray(RControl.getR().eval("paste(geterrmessage(), collapse=\"\\n\")").asRChar().getData());		
+	}
 	
 	protected String getROptions() {		
 		return StringTools.collapseStringArray(RControl.getR().eval("paste(capture.output(options()), collapse=\"\\n\")").asRChar().getData());

@@ -77,6 +77,8 @@
 \tableofcontents
 
 <<OptionsAndLibraries, include=FALSE, message=FALSE>>=
+# knitr has to be loaded for 'set_parent' and CRAN checks and also for opt_chunk during build process.
+library(knitr)
 if (exists("opts_chunk")) {
   opts_chunk$set(concordance=TRUE)
   opts_chunk$set(tidy.opts=list(keep.blank.line=FALSE, width.cutoff=80))
@@ -92,10 +94,10 @@ CrossoverNamespace <- function(before, options, envir) {
   if (before) {
     ## code to be run before a chunk
     #attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3)
-    attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3, warn.conflicts=FALSE)
+    attach(list2env(as.list(asNamespace("Crossover"))), name="exposed:Crossover", pos=3, warn.conflicts=FALSE)
   } else {
     ## code to be run after a chunk
-    detach("namespace:Crossover")
+    detach("exposed:Crossover")
   }
 }
 
@@ -112,8 +114,6 @@ library(MASS)
 library(multcomp)
 library(ggplot2)
 library(Matrix)
-# knitr has to be loaded for 'set_parent' and CRAN checks.
-library(knitr)
 bibCall <- TRUE
 
 @
@@ -398,11 +398,6 @@ $\gamma\sim\sN(0,D)$. Then\footnote{See for example \cite[chapter
 For known $V:=\Var(Y)=ZDZ^T+\Sigma$ the MLE and BLUE is given by
 
 \[\hat\beta=(X^tV^{-1}X)^{-1}X^tV^{-1}Y.\]
-
-<<detachNameSpace, echo=TRUE, eval=FALSE, include=FALSE>>=
-detach("namespace:Crossover")
-@
-
 
 <<appendices, child='childs/Appendices.Rnw'>>=
 @

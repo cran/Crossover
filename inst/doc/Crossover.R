@@ -1,4 +1,6 @@
 ## ----OptionsAndLibraries, include=FALSE, message=FALSE------------------------
+# knitr has to be loaded for 'set_parent' and CRAN checks and also for opt_chunk during build process.
+library(knitr)
 if (exists("opts_chunk")) {
   opts_chunk$set(concordance=TRUE)
   opts_chunk$set(tidy.opts=list(keep.blank.line=FALSE, width.cutoff=80))
@@ -14,10 +16,10 @@ CrossoverNamespace <- function(before, options, envir) {
   if (before) {
     ## code to be run before a chunk
     #attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3)
-    attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3, warn.conflicts=FALSE)
+    attach(list2env(as.list(asNamespace("Crossover"))), name="exposed:Crossover", pos=3, warn.conflicts=FALSE)
   } else {
     ## code to be run after a chunk
-    detach("namespace:Crossover")
+    detach("exposed:Crossover")
   }
 }
 
@@ -34,8 +36,6 @@ library(MASS)
 library(multcomp)
 library(ggplot2)
 library(Matrix)
-# knitr has to be loaded for 'set_parent' and CRAN checks.
-library(knitr)
 bibCall <- TRUE
 
 
@@ -207,7 +207,7 @@ plot(x, type=2)
 
 ## ----TestOfDifferentApproaches, echo=TRUE, eval=TRUE, withNameSpace=TRUE------
 
-attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3, warn.conflicts=FALSE)
+#attach(loadNamespace("Crossover"), name="namespace:Crossover", pos=3, warn.conflicts=FALSE)
 
 s <- 6
 p <- 3
@@ -273,7 +273,7 @@ for (i in 1:length(resultL)) {
   print(xtable(design, digits=0)) 
   var <- c()
   var2 <- c()
-  for (m in models[1:8]) {
+  for (m in Crossover:::models[1:8]) {
     
     #C <- Crossover:::contrMat2(type="Tukey", v=2, model=m, eff.factor=c(1,1,1))
     #C <- contrMat(rep(1, Crossover:::nrOfParameters(model=i, v=v)), "Tukey")
@@ -338,9 +338,6 @@ if (!exists("bibCall")) {
   # RStudio / bibtex / knitr child document workaround from http://tex.stackexchange.com/questions/31373/citations-with-no-bibliography-at-the-end
   cat("\\newsavebox\\mytempbib \\savebox\\mytempbib{\\parbox{\\textwidth}{\\bibliography{../literatur}}}")
 }
-
-## ----detachNameSpace, echo=TRUE, eval=FALSE, include=FALSE--------------------
-#  detach("namespace:Crossover")
 
 ## ----set-parent-appendices, echo=FALSE, cache=FALSE, include=FALSE------------
 set_parent('../Crossover.Rnw')

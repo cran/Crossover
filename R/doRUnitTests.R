@@ -1,7 +1,7 @@
 ## Adapted and extended from the code from http://rwiki.sciviews.org/doku.php?id=developers:runit
 unitTestsCrossover <- function(extended=FALSE, java=FALSE, interactive=FALSE, junitLibrary, outputPath) {
-	if(!requireNamespace("RUnit", quietly=TRUE)) {
-		stop("Please install package RUnit to run the unit tests.")
+  if(!"testthat" %in% installed.packages()[,"Package"]) {
+		stop("Please install package testthat to run the unit tests.")
 	}
 	if (extended) Sys.setenv(CROSSOVER_UNIT_TESTS=paste(Sys.getenv("CROSSOVER_UNIT_TESTS"),"extended"))
 	if (interactive) Sys.setenv(CROSSOVER_UNIT_TESTS=paste(Sys.getenv("CROSSOVER_UNIT_TESTS"),"interactive"))
@@ -10,38 +10,14 @@ unitTestsCrossover <- function(extended=FALSE, java=FALSE, interactive=FALSE, ju
 			Sys.setenv(CROSSOVER_UNIT_TEST_OPATH=getwd())
 		}
 	} else {
+	  stop("Since the transition to testthat 'outputPath' is currently not supported.") #TODO
 		Sys.setenv(CROSSOVER_UNIT_TEST_OPATH=outputPath)
 	}
-	pkg <- "Crossover" 
-	path <- system.file("unitTests", package=pkg)
-	cat("\nRunning unit tests\n")
-	print(list(pkg=pkg, getwd=getwd(), pathToUnitTests=path))
-	
-	library(package=pkg, character.only=TRUE)
-	
-	## --- Testing ---
-	
-	# Yes, these functions always exist, since we stopped if RUnit could not be required:
-	defineTestSuite <- get("defineTestSuite")
-	runTestSuite <- get("runTestSuite")
-	printTextProtocol <- get("printTextProtocol")
   
-	## Define tests
-	testSuite <- defineTestSuite(name=paste(pkg, "unit testing"), dirs=path)
-	
-	## Run
-	tests <- with(loadNamespace(pkg), runTestSuite(testSuite))
-	
-	## Default report name
-	pathReport <- file.path(path, "report")
-	
-	## Report to stdout and text files
-	cat("------------------- UNIT TEST SUMMARY ---------------------\n\n")
-	printTextProtocol(tests, showDetails=FALSE)
-	printTextProtocol(tests, showDetails=FALSE,
-			fileName=paste(pathReport, "Summary.txt", sep=""))
-	printTextProtocol(tests, showDetails=TRUE,
-			fileName=paste(pathReport, ".txt", sep=""))
+  pkg <- "Crossover" 
+  path <- system.file("tests", package=pkg)
+  if (length(dir(path=path))==0) warning("Tests seem not to be installed. Please use the --install-tests parameter to R CMD install, or INSTALL_opts = '--install-tests' argument to install.packages()")
+  testthat::test_package("Crossover")
 	
 	if (java || "java" %in% strsplit(Sys.getenv("CROSSOVER_UNIT_TESTS"),",")[[1]]) {
 		# Test whether junit*.jar is in classpath
