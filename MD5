@@ -1,6 +1,6 @@
-051eb5a34398898a9579ec034fbc4a2c *DESCRIPTION
-590d4d7c83b81b7d4aa979b87469cdb3 *NAMESPACE
-394adfde61874c746526774fe7c2229c *NEWS
+7c1137b2127398a251b0eb63850fc3da *DESCRIPTION
+e9b7139a8d4c0732c65aa3a98f61300d *NAMESPACE
+b432e6aa99468db4490ec0d222dd3ad2 *NEWS
 bedbacdde170b2e2667eadcd965543ee *R/buildSummary.R
 929437f86e20e0c9c2f3cab852848d65 *R/contrMat.R
 6a3a6d99d097160b5e4536cc54f0db62 *R/crossoverS4.R
@@ -9,7 +9,7 @@ bedbacdde170b2e2667eadcd965543ee *R/buildSummary.R
 4dfdfd46228a1111d9b792ca07373d6c *R/efficiency.R
 de3986d5177506f62f4e5d6b4bc047a0 *R/environments.R
 11a9561e38cd99a41d7474b06a91e751 *R/estimable.R
-4fc51bceb911c9097ce2b9ac92f93c9b *R/functionsTestsAndExploring.R
+57f329ba809961c8c88f922b775c8e89 *R/functionsTestsAndExploring.R
 c4450f31d946d9b587d8e99673d68861 *R/general.carryover.R
 01247688c5e30b7efd17c6d1ee95900e *R/infiniteSearch.R
 a619314d4269583ef15710c747497f76 *R/misc.R
@@ -19,7 +19,7 @@ da9144a21e571600e7d79710bd04f337 *R/onLoad.R
 d656b0c794dcdbbce3f068c7ba7c98df *R/randomDesign.R
 e82ff041d34f8d1d9c9e6d3a77dae72a *R/search.R
 aafd33fbdbb5dd09af00ca3638755d09 *R/startGUIs.R
-bb2a54f1848d1f3b50d8386541b679f6 *build/vignette.rds
+2018f67a8e8006ef6544738198089eaf *build/vignette.rds
 064cdda3e0d083292da35ffd55a22d37 *data/anderson.rda
 cf60f2af56f67e16edead7a604f0805e *data/andersonPreece.rda
 1627d8aaf6b62cd54d14015d105a231a *data/archdeacon.rda
@@ -48,7 +48,7 @@ ed9c656a8cf46f19852943e104ef5163 *data/pattersonLucasExtraPeriod.rda
 8fbc3c81bb57f6aedc70cb26b4fe21e4 *data/williams.rda
 f8b9c12f3c8c179a08b4b3942f3c363c *inst/doc/Crossover.R
 621475b1d1cfbc3e1102082f9ff64ae9 *inst/doc/Crossover.Rnw
-5216bdb3743b79528f7d39adc2475172 *inst/doc/Crossover.pdf
+49fa9adf7fe1ec31050aaa930606476e *inst/doc/Crossover.pdf
 85c69aac199d9d76dcebcbda08eee748 *inst/java/crossover.jar
 cebca4693c4cbb4baa894db81c265433 *java/build.xml
 6161ed4d7d271e5608c28b92629e560b *java/org/mutoss/config/ClassConfig.java
@@ -70,7 +70,7 @@ c523ce71c2edabe8c3d476450f011445 *java/org/mutoss/gui/FillTableWorker.java
 4d2318771d351578ce6c787860dc71a1 *java/org/mutoss/gui/JavaGD.java
 168acb90568c37e8584caf68fe12f9e7 *java/org/mutoss/gui/MenuBarCrossover.java
 5c82e023de6c3c74790a28c839bc4783 *java/org/mutoss/gui/RCallServicesREngineWrapper.java
-6c50edaad82722f0647dc32cdfaed356 *java/org/mutoss/gui/RControl.java
+2064905f0012ae459939911276c638ea *java/org/mutoss/gui/RControl.java
 4233fbc7955a30a15805872956ea8f31 *java/org/mutoss/gui/VariableNameDialog.java
 fd1a898b4780d049b0137053f6a74c12 *java/org/mutoss/gui/archive/DesignArchive.java
 fa51e65a67ab448407f10ea91a12908d *java/org/mutoss/gui/archive/DesignArchiveControl.java
@@ -128,6 +128,7 @@ e7088ec037d1c4a61e7f153c45776909 *man/getDesign-methods.Rd
 7a246b35fd8777d5671eb30353a78898 *man/rcdMatrix.Rd
 1c82875a308fccec5b33a1b4d6be299c *man/resultL.Rd
 1b8b6674c77586bfd45401b14e078b5e *man/searchCrossOverDesign.Rd
+7117ea1c643e9b68fc2a67ae9be50f2c *src/Crossover_init.c
 d166a7dc70c663432798d4ab27f85685 *src/Makevars
 3041ef492cc500178cdb6ab77f2cffd3 *src/Makevars.win
 61aa2084d200930dd9da78d4e9eacd98 *src/searchCOD.cpp
@@ -138,7 +139,7 @@ e54fa93ce3b7c5cd1e05dbd0e3157559 *tests/testthat/test-efficiency.R
 12adaf7740ca1fabab8cd19a97e8a1c1 *tests/testthat/test-evaluation.R
 d670d28232a8195baf4b312486b6dcbe *tests/testthat/test-general-carryover.R
 b6dc6e6c23982e9464e23d6024aec99a *tests/testthat/test-misc.R
-92c066893f62ae0226ba44d52db1d173 *tests/testthat/test-r-vs-c.R
+c723b779cefa23265a0d14d2980b8d5a *tests/testthat/test-r-vs-c.R
 5b32a64b586244b7977d6eee2c9ed29e *tests/testthat/test-search.R
 4a27b05287efcdae4f1f9ce64cd628a7 *tests/testthat/test-simulation.R
 621475b1d1cfbc3e1102082f9ff64ae9 *vignettes/Crossover.Rnw
