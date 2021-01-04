@@ -36,6 +36,7 @@ library(MASS)
 library(multcomp)
 library(ggplot2)
 library(Matrix)
+library(Rcpp)
 bibCall <- TRUE
 
 
