@@ -1,6 +1,6 @@
-0f2f59d45639f5fe95c247a9ec638edc *DESCRIPTION
+b05ee1a6b84a416ca235da55cd2744ad *DESCRIPTION
 059cf0b96324a004af0fd3e2c976043a *NAMESPACE
-8869d00dfec92c09ab16abfb32297804 *NEWS
+cb9b7eee7196b657a06e74f6639153bb *NEWS
 7eb4460c8e6c9c7094e4ac28446496ff *R/buildSummary.R
 929437f86e20e0c9c2f3cab852848d65 *R/contrMat.R
 cab29218c53f046e96c4019ca2a45f58 *R/crossoverS4.R
@@ -14,12 +14,12 @@ de3986d5177506f62f4e5d6b4bc047a0 *R/environments.R
 01247688c5e30b7efd17c6d1ee95900e *R/infiniteSearch.R
 a619314d4269583ef15710c747497f76 *R/misc.R
 0bf2d07bf5c6c63251fe6c275abb2e2f *R/model.R
-e50e1d3e57d91a175b2f1d5df6b9a59a *R/onLoad.R
+b13251c864712ef88b9d79ab63fd99fa *R/onLoad.R
 187deac89753efd620df3beb8dc2263c *R/order.R
 d656b0c794dcdbbce3f068c7ba7c98df *R/randomDesign.R
 0685541d1100a76f709fa9c139361daa *R/search.R
 678bb789909395e5e1996a11687aea9f *R/startGUIs.R
-274e65b00f8c5c7f87ebf71c2c14646c *build/vignette.rds
+224c15782264dbd4c4cd49ea14299400 *build/vignette.rds
 064cdda3e0d083292da35ffd55a22d37 *data/anderson.rda
 cf60f2af56f67e16edead7a604f0805e *data/andersonPreece.rda
 1627d8aaf6b62cd54d14015d105a231a *data/archdeacon.rda
@@ -48,7 +48,7 @@ ed9c656a8cf46f19852943e104ef5163 *data/pattersonLucasExtraPeriod.rda
 8fbc3c81bb57f6aedc70cb26b4fe21e4 *data/williams.rda
 323b23a5e17fad1c5da7854b84dfc58b *inst/doc/Crossover.R
 6e8a5fca75d90f9f155ad4d3350139e5 *inst/doc/Crossover.Rnw
-d6f8407c1ef2008305a416aa7f39b130 *inst/doc/Crossover.pdf
+2031e6895f33635123985099fa8da4f0 *inst/doc/Crossover.pdf
 85c69aac199d9d76dcebcbda08eee748 *inst/java/crossover.jar
 cebca4693c4cbb4baa894db81c265433 *java/build.xml
 6161ed4d7d271e5608c28b92629e560b *java/org/mutoss/config/ClassConfig.java
